@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InkFusion Editor</title>
+    <style>
+        /* Basic styling for the editor */
+        #editor {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        /* Toolbar styling */
+        .toolbar button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .toolbar {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        /* Notification styling */
+        #notification {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #e0ffe0;
+            color: #333;
+        }
+    </style>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.innerText = message;
+            notification.style.display = 'block';
+            setTimeout(() => notification.style.display = 'none', 3000); // Hide after 3 seconds
+        }
+
+        // Automatically initialize the API when the page loads
+        function initializeGAPI() {
+            gapi.load('client:auth2', function() {
+                gapi.client.init({
+                    clientId: '242252059177-98fpd164nipq9j8rff9amndtfjm3cs2l.apps.googleusercontent.com', // Replace with your actual Client ID
+                    scope: 'https://www.googleapis.com/auth/documents'
+                }).then(function () {
+                    gapi.auth2.getAuthInstance().signIn();
+                });
+            });
+        }
+
+        // Automatically initialize the API when the script loads
+        window.onload = function() {
+            initializeGAPI();
+        };
+
+        function saveAsDraft() {
+            const content = document.getElementById('editor').innerText;
+            // Simulate saving as draft (e.g., store content locally or in a temporary storage)
+            console.log('Draft saved:', content);
+            showNotification('Draft saved successfully.');
+        }
+
+        function saveDocument() {
+            const content = document.getElementById('editor').innerText;
+            // Simulate saving the document (e.g., store content in the database)
+            console.log('Document saved:', content);
+            showNotification('Document saved successfully.');
+        }
+
+        function publishDocument() {
+            const content = document.getElementById('editor').innerText;
+            // Simulate publishing the document (e.g., store content in the database and mark as published)
+            console.log('Document published:', content);
+            showNotification('Document published successfully.');
+        }
+    </script>
+</head>
+<body>
+    <h1><center>InkFusion Editor</center></h1>
+
+    <!-- Toolbar for basic formatting -->
+    <div class="toolbar">
+        <button onclick="createNewDocument()"><i class="material-icons">note_add</i></button>
+        <button onclick="formatText('bold')"><i class="material-icons">format_bold</i></button>
+        <button onclick="formatText('italic')"><i class="material-icons">format_italic</i></button>
+        <button onclick="formatText('underline')"><i class="material-icons">format_underline</i></button>
+        <!-- Add more formatting options as needed -->
+    </div>
+
+    <!-- Editor area -->
+    <div id="editor" contenteditable="true">
+        Start typing your content here...
+    </div>
+
+    <!-- Buttons for Save, Draft, and Publish -->
+    <div>
+        <button onclick="saveAsDraft()">Save as Draft</button>
+        <button onclick="saveDocument()">Save</button>
+        <button onclick="publishDocument()">Publish</button>
+    </div>
+
+    <!-- Notification area -->
+    <div id="notification"></div>
+    <script>
+        function createNewDocument() {
+    if (confirm("Are you sure you want to create a new document? Unsaved changes will be lost.")) {
+        // Clear the editor content to start a new document
+        document.getElementById('editor').innerText = '';
+        showNotification('New document created.');
+    }
+}
+
+    </script>
+</body>
+</html>

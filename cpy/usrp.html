@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        /* Basic styling for profile content */
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .post-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h1>Your Profile</h1>
+
+        <h2>Published Posts</h2>
+        <div class="post-grid" id="published-posts">
+            <!-- Published posts will be dynamically inserted here -->
+        </div>
+
+        <h2>Drafts</h2>
+        <div class="post-grid" id="drafts">
+            <!-- Draft posts will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        // Sample function to fetch and display posts
+        function loadPosts() {
+            // Fetch data from the server (replace URL with your server endpoint)
+            fetch('/api/user-posts')
+                .then(response => response.json())
+                .then(data => {
+                    displayPosts(data.publishedPosts, 'published-posts');
+                    displayPosts(data.drafts, 'drafts');
+                });
+        }
+
+        function displayPosts(posts, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; // Clear existing content
+
+            posts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.className = 'post-item';
+                postElement.innerHTML = `
+                    <h3>${post.title}</h3>
+                    <p>${post.excerpt}</p>
+                    <a href="/post/${post.id}">Read more</a>
+                `;
+                container.appendChild(postElement);
+            });
+        }
+
+        // Load posts when the page is loaded
+        window.onload = loadPosts;
+    </script>
+</body>
+</html>

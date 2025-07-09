@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup - InkFusion</title>
+    <link href="bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="bootstrap/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .signup-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .signup-box {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            height: 800px;
+        }
+
+        .signup-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .signup-form {
+            padding: 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .signup-form h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .error {
+            color: red;
+            margin: 0.5rem 0;
+        }
+
+        .success {
+            color: green;
+            margin: 0.5rem 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Signup Form -->
+    <div class="signup-container">
+        <div class="signup-box">
+            <div class="col-md-6 p-0">
+                <img src="img/signbnr.jpg" alt="Sign Up" class="signup-image">
+            </div>
+            <div class="col-md-6 signup-form">
+                <h2>Create an Account</h2>
+                <form id="signup-form" method="post">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                        <div id="name-error" class="error hidden"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                        <div id="email-error" class="error hidden"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary toggle-password" type="button">
+                                <i class="fa fa-eye">show</i>
+                            </button>
+                            </div>
+                        <div id="password-error" class="error hidden"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary toggle-password" type="button">
+                                <i class="fa fa-eye">show</i>
+                            </button>
+                            </div>
+                        <div id="confirm-password-error" class="error hidden"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile_photo">Profile Photo</label>
+                        <input type="file" class="form-control-file" id="profile_photo" name="profile_photo" >
+                        <div id="file-error" class="error hidden"></div>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="terms-checkbox" name="terms-checkbox" required>
+                        <label class="form-check-label" for="terms-checkbox">I agree to the <a href="t&c.html">Terms and Conditions</a> and <a href="privacypolicy.html">Privacy Policy</a>.</label>
+                        <div id="terms-error" class="error hidden"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+                    <button type="reset" class="btn btn-primary btn-block">Reset</button>
+                    <p class="text-center mt-3">Already have an account? <a href="L.html">Login here</a>.</p>
+                    <p class="text-center mt-3"><a href="index.html">Back To Home</a>.</p>
+                </form>
+                <div id="form-message" class="success hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent page reload
+
+            document.querySelectorAll(".toggle-password").forEach((button) => {
+        button.addEventListener("click", function () {
+        const input = this.closest(".input-group").querySelector("input");
+        const icon = this.querySelector("i");
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+        });
+    });
+        
+
+            // Clear previous messages
+            document.querySelectorAll('.error').forEach(e => e.classList.add('hidden'));
+            document.getElementById('form-message').classList.add('hidden');
+
+            let isValid = true;
+            let formData = new FormData(this);
+
+            // Validation
+            if (!formData.get('name')) {
+                document.getElementById('name-error').textContent = 'Name is required.';
+                document.getElementById('name-error').classList.remove('hidden');
+                isValid = false;
+            }
+            if (!formData.get('email')) {
+                document.getElementById('email-error').textContent = 'Email is required.';
+                document.getElementById('email-error').classList.remove('hidden');
+                isValid = false;
+            }
+            if (!formData.get('password')) {
+                document.getElementById('password-error').textContent = 'Password is required.';
+                document.getElementById('password-error').classList.remove('hidden');
+                isValid = false;
+            }
+            if (formData.get('password') !== formData.get('confirm-password')) {
+                document.getElementById('confirm-password-error').textContent = 'Passwords do not match.';
+                document.getElementById('confirm-password-error').classList.remove('hidden');
+                isValid = false;
+            }
+            if (!formData.get('terms-checkbox')) {
+                document.getElementById('terms-error').textContent = 'You must agree to the Terms and Conditions.';
+                document.getElementById('terms-error').classList.remove('hidden');
+                isValid = false;
+            }
+
+            // File validation
+            const fileInput = document.getElementById('profile_photo');
+            const file = fileInput.files[0];
+            if (file) {
+                const validExtensions = ['jpg', 'jpeg', 'png'];
+                const fileExtension = file.name.split('.').pop().toLowerCase();
+                if (!validExtensions.includes(fileExtension)) {
+                    document.getElementById('file-error').textContent = 'Only JPG, JPEG & PNG files are allowed.';
+                    document.getElementById('file-error').classList.remove('hidden');
+                    isValid = false;
+                }
+                if (file.size > 2000000) { // 2MB
+                    document.getElementById('file-error').textContent = 'File size exceeds the limit of 2MB.';
+                    document.getElementById('file-error').classList.remove('hidden');
+                    isValid = false;
+                }
+            } else {
+                document.getElementById('file-error').textContent = '';
+                document.getElementById('file-error').classList.remove('hidden');
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Send data via AJAX
+                fetch('signup.php', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('form-message').textContent = data.error;
+                        document.getElementById('form-message').classList.remove('hidden');
+                    } else if (data.success) {
+                        document.getElementById('form-message').textContent = data.success;
+                        document.getElementById('form-message').classList.remove('hidden');
+                        document.getElementById('signup-form').reset(); // Clear form fields
+                    }
+                });
+            }
+            // Redirect to login page after successful registration
+            setTimeout(() => {
+                        window.location.href = 'L.html';
+                    }, 2000);
+        });
+    </script>
+</body>
+</html>
