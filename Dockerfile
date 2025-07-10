@@ -1,14 +1,18 @@
-# Use official PHP image with Apache
 FROM php:8.1-apache
 
-# Enable Apache rewrite module (if you plan to use .htaccess)
+# Enable Apache rewrite module
 RUN a2enmod rewrite
 
-# Copy all project files to the web server root
+# ✅ Install system dependencies, then install mysqli
+RUN apt-get update && \
+    apt-get install -y libpng-dev libjpeg-dev libonig-dev libxml2-dev zip unzip && \
+    docker-php-ext-install mysqli
+
+# Copy project files
 COPY . /var/www/html/
 
-# Give proper permissions (optional)
+# Set ownership (optional)
 RUN chown -R www-data:www-data /var/www/html
 
-# Expose port 80
+# Expose default Apache port
 EXPOSE 80
